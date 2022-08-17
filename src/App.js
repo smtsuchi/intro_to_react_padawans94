@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
-import Contact from './Contact'
-import Home from './Home'
-import Nav from './Nav'
+import Contact from './views/Contact'
+import Home from './views/Home'
+import Nav from './components/Nav'
 import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import News from './views/News'
+import IG from './views/IG'
 
 export default class App extends Component {
   constructor() {
@@ -26,14 +28,17 @@ export default class App extends Component {
         <div>
           <Nav />
 
-          {this.state.name}
+          {/* {this.state.name}
 
-          <button onClick={this.addToAge}>Happy Birthday</button>
+          <button onClick={this.addToAge}>Happy Birthday</button> */}
 
 
           <Routes>
             <Route path='/' element={<Home ageXYZ={this.state.age}/>}/>
             <Route path='/contact' element={<Contact/>}/>
+            <Route path='/news' element={<News/>}/>
+            <Route path='/feed' element={<IG/>}/>
+
           </Routes>
 
 
