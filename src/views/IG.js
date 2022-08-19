@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Post from '../components/Post';
+import { Link } from 'react-router-dom';
 
 export default class IG extends Component {
     constructor(){
@@ -20,7 +21,7 @@ export default class IG extends Component {
     }
 
     showPosts = () => {
-        return this.state.posts.map(p=><Post key={p.id} postInfo={p}/>)
+        return this.state.posts.map(p=><Link key={p.id} to={`/posts/${p.id}`}><Post  postInfo={p}/></Link>)
     }
 
     render = () => {
