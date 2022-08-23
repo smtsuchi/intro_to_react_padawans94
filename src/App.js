@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import Contact from './views/Contact'
 import Home from './views/Home'
 import Nav from './components/Nav'
@@ -11,56 +11,62 @@ import CreatePost from './views/CreatePost'
 import ToDoList from './views/ToDoList'
 import UpdatePost from './views/UpdatePost'
 import SinglePost from './views/SinglePost'
+import Shop from './views/Shop'
+import SingleProduct from './views/SingleProduct'
 
-export default class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      posts: [],
-      user: {},
-      name: 'Shoha',
-      age: 9000
-    }
+export default function App() {
+  // constructor() {
+  //   super();
+  //   this.state = {
+  //     user: {},
+  //     cart: []
+  //   }
+  // }
+
+  const [user, setUser] = useState({})
+  const [cart, setCart] = useState([])
+
+  // logMeIn = (user) => {
+  //   this.setState({
+  //     user: user
+  //   })
+  // }
+
+  const logMeIn = (user) => {
+    setUser(user)
   }
 
-  logMeIn = (user) => {
-    this.setState({
-      user: user
-    })
+  const addToCart = (product) => {
+    setCart([...cart, product])
   }
 
-  addToAge = () => {
-    this.setState({age: this.state.age + 1})
-  }
-  
-
-  render() {
-    return (
-      <BrowserRouter>
-        <div>
-          <Nav />
-
-          {/* {this.state.name}
-
-          <button onClick={this.addToAge}>Happy Birthday</button> */}
 
 
-          <Routes>
-            <Route path='/' element={<Home ageXYZ={this.state.age}/>}/>
-            <Route path='/contact' element={<Contact/>}/>
-            <Route path='/news' element={<News/>}/>
-            <Route path='/feed' element={<IG/>}/>
-            <Route path='/login' element={<Login logMeIn={this.logMeIn}/>}/>
-            <Route path='/signup' element={<SignUp/>}/>
-            <Route path='/posts/create' element={<CreatePost user={this.state.user}/>}/>
-            <Route path='/posts/update/:postId' element={<UpdatePost user={this.state.user}/>} />
-            <Route path='/posts/:postId' element={<SinglePost user={this.state.user}/>}/>
-            <Route path='/todo' element={<ToDoList />} />
-          </Routes>
+
+  return (
+    <BrowserRouter>
+      <div>
+        <Nav cart={cart}/>
 
 
-        </div>
-      </BrowserRouter>
-    )
-  }
+        <Routes>
+          <Route path='/' element={<Home ageXYZ={9000} />} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/news' element={<News />} />
+          <Route path='/feed' element={<IG />} />
+          <Route path='/login' element={<Login logMeIn={logMeIn} />} />
+          <Route path='/signup' element={<SignUp />} />
+          <Route path='/posts/create' element={<CreatePost user={user} />} />
+          <Route path='/posts/update/:postId' element={<UpdatePost user={user} />} />
+          <Route path='/posts/:postId' element={<SinglePost user={user} />} />
+          <Route path='/todo' element={<ToDoList />} />
+          <Route path='/shop' element={<Shop addToCart={addToCart}/>} />
+          <Route path='/shop/:productId' element={<SingleProduct />} />
+        </Routes>
+
+
+      </div>
+    </BrowserRouter>
+  )
+
 }
