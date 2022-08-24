@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import Product from '../components/Product';
 
-export default function Shop({addToCart}) {
+export default function Shop({addToCart, user}) {
     const [products, setProducts] = useState([])
 
     const getProducts = async () => {
@@ -18,7 +18,7 @@ export default function Shop({addToCart}) {
     }, [])
 
     const showProducts = () => {
-        return products.map(p=><Product addToCart={addToCart} product={p}/>)
+        return products.map(p=><Product key={p.id} addToCart={addToCart} product={p} user={user}/>)
     }
 
     return (

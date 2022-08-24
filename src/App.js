@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Contact from './views/Contact'
 import Home from './views/Home'
 import Nav from './components/Nav'
@@ -13,6 +13,7 @@ import UpdatePost from './views/UpdatePost'
 import SinglePost from './views/SinglePost'
 import Shop from './views/Shop'
 import SingleProduct from './views/SingleProduct'
+import Cart from './views/Cart'
 
 export default function App() {
   // constructor() {
@@ -22,8 +23,16 @@ export default function App() {
   //     cart: []
   //   }
   // }
+  const getUserFromLocalStorage = () => {
+    const foundUser = localStorage.getItem('user')
+    if (foundUser){
+      return JSON.parse(foundUser)
+    }
+    return {}
+  };
 
-  const [user, setUser] = useState({})
+
+  const [user, setUser] = useState(getUserFromLocalStorage())
   const [cart, setCart] = useState([])
 
   // logMeIn = (user) => {
@@ -34,19 +43,57 @@ export default function App() {
 
   const logMeIn = (user) => {
     setUser(user)
+    localStorage.setItem('user', JSON.stringify(user))
+  }
+  const logMeOut = () => {
+    setUser({})
+    localStorage.removeItem('user')
   }
 
   const addToCart = (product) => {
     setCart([...cart, product])
   }
 
+  const removeFromCart = (product) => {
+    const newCart = [...cart]
+    for (let i=cart.length-1; i>=0; i--){
+      if (product.id == cart[i].id){
+        newCart.splice(i, 1)
+        break
+      }
+    }
+    setCart(newCart)
+  }
 
+  const getCart = async (user) => {
+    if (user.token){
+      const res = await fetch('http://localhost:5000/api/cart', {
+        method: "GET",
+        headers: {Authorization: `Bearer ${user.token}`}
+      });
+      const data = await res.json();
+      console.log(data)
+      if (data.status==='ok'){
+        setCart(data.cart)
+      }
+      else{
+       setCart([]) 
+      }
+    }
+    else{
+      setCart([]) 
+    }
+  };
+
+  useEffect(()=>{
+    getCart(user)
+  }, [user])
 
 
   return (
     <BrowserRouter>
       <div>
-        <Nav cart={cart}/>
+        <Nav user={user} cart={cart} logMeOut={logMeOut}/>
 
 
         <Routes>
@@ -60,8 +107,9 @@ export default function App() {
           <Route path='/posts/update/:postId' element={<UpdatePost user={user} />} />
           <Route path='/posts/:postId' element={<SinglePost user={user} />} />
           <Route path='/todo' element={<ToDoList />} />
-          <Route path='/shop' element={<Shop addToCart={addToCart}/>} />
+          <Route path='/shop' element={<Shop addToCart={addToCart} user={user}/>} />
           <Route path='/shop/:productId' element={<SingleProduct />} />
+          <Route path='/cart' element={<Cart cart={cart} removeFromCart={removeFromCart} user={user}/>} />
         </Routes>
 
 
