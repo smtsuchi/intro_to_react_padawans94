@@ -1,6 +1,8 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { withNavigate } from '../hocs'
 
-export default class CreatePost extends Component {
+class CreatePost extends Component {
+    
 
     sendCreateInfo = async (e) => {
         e.preventDefault();
@@ -18,6 +20,9 @@ export default class CreatePost extends Component {
         });
         const data = await res.json();
         console.log(data)
+        if (data.status==='ok'){
+            this.props.navigate('/feed')
+        }
     };
 
     render() {
@@ -42,3 +47,6 @@ export default class CreatePost extends Component {
         )
     }
 }
+
+
+export default  withNavigate(CreatePost)

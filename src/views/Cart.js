@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 export default function Cart({ cart, removeFromCart, user }) {
+
+    const navigate = useNavigate()
 
     const getUniqueCart = (cart) => {
         let uniqueCart = [];
@@ -51,6 +54,12 @@ export default function Cart({ cart, removeFromCart, user }) {
         }
     };
 
+    const checkout = async () => {
+        // const res = await fetch(); // Fetch POST request to our flask backend
+        // const data = await res.json();
+        navigate('/shop')
+
+    }
 
     return cart.length === 0 ?
         (<h1>Your cart is empty.</h1>)
@@ -91,7 +100,7 @@ export default function Cart({ cart, removeFromCart, user }) {
                         <th scope="col"></th>
                         <th scope="col"></th>
                         <th scope="col">${getTotal()}</th>
-                        <th scope="col"><button className='btn btn-success'>Checkout</button></th>
+                        <th scope="col"><button onClick={()=>{checkout()}} className='btn btn-success'>Checkout</button></th>
                     </tr>
                 </tfoot>
             </table>

@@ -1,6 +1,16 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 
 export default class Login extends Component {
+    constructor(){
+        super();
+        this.state = {
+            redirect: false
+        }
+    }
+
+
+
     sendLoginInfo = async (e) => {
         e.preventDefault();
 
@@ -37,11 +47,14 @@ export default class Login extends Component {
         console.log(data)
         if (data.status === 'ok') {
             this.props.logMeIn(data.data)
+            this.setState({redirect: true})
         }
     };
 
     render() {
-        return (
+        return this.state.redirect? <Navigate to='/' />:
+        
+        (
             <form className='col-4' onSubmit={(e) => { this.sendBasicAuth(e) }}>
 
                 <div className="mb-3">
@@ -56,6 +69,8 @@ export default class Login extends Component {
                 </div>
               
                 <button type="submit" className="btn btn-primary">Submit</button>
+                <p>Don't have an account? <Link to='/signup'>Sign Up here.</Link></p>
+                
             </form>
         )
     }
